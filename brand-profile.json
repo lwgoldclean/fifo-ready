@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "brand_name": "FIFO Ready",
+  "website_url": "https://fifoready.com.au",
+  "extracted_at": "2026-03-31T00:00:00Z",
+
+  "voice": {
+    "formal_casual": 4,
+    "rational_emotional": 5,
+    "playful_serious": 7,
+    "bold_subtle": 8,
+    "traditional_innovative": 4,
+    "expert_accessible": 3,
+    "descriptors": ["direct", "motivating", "no-BS", "practical", "Australian"]
+  },
+
+  "colors": {
+    "primary": "#F59E0B",
+    "secondary": ["#1C1917", "#FFFFFF"],
+    "forbidden": ["#FF0000"],
+    "background": "#FFFFFF",
+    "text": "#1C1917"
+  },
+
+  "typography": {
+    "heading_font": "Inter",
+    "body_font": "Inter",
+    "pairing_descriptor": "clean bold sans-serif, high-impact readability"
+  },
+
+  "imagery": {
+    "style": "gritty authentic photography",
+    "subjects": [
+      "Australian mining workers on site",
+      "fly-in fly-out workers boarding planes",
+      "red dirt outback mining landscape",
+      "confident workers with hi-vis gear",
+      "happy families welcoming workers home"
+    ],
+    "composition": "bold foreground subject, authentic environment backgrounds",
+    "forbidden": ["stock photo clichés", "corporate office settings", "suits and ties", "American/non-Australian imagery"]
+  },
+
+  "aesthetic": {
+    "mood_keywords": ["gritty", "authentic", "aspirational", "rugged", "Australian"],
+    "texture": "raw, industrial",
+    "negative_space": "moderate"
+  },
+
+  "brand_values": [
+    "real-world preparation",
+    "no fluff, all action",
+    "mate-to-mate honesty",
+    "life-changing income",
+    "Australian pride"
+  ],
+
+  "target_audience": {
+    "age_range": "22-45",
+    "profession": "Australian workers in low-to-mid wage jobs seeking FIFO mining careers",
+    "pain_points": [
+      "stuck in $50k-$70k/yr jobs with no clear path out",
+      "don't know how to get into FIFO without experience",
+      "afraid of failing the pre-employment medical or drug test",
+      "no idea what to say in a FIFO interview",
+      "don't know which companies are actually hiring"
+    ],
+    "aspirations": [
+      "$100k-$150k+ salary working 2 weeks on, 1 week off",
+      "pay off mortgage faster and support their family",
+      "get out of the city grind or low-paying trade work",
+      "travel and see outback Australia while earning big"
+    ]
+  },
+
+  "offer": {
+    "product": "FIFO Ready Online Training Course",
+    "price": "$197 AUD (one-time payment)",
+    "format": "Online self-paced modules, documents, and quizzes",
+    "transformation": "Go from zero FIFO experience to job-ready with a polished resume, interview answers, and full pre-employment preparation",
+    "urgency_angle": "Companies are hiring now — be ready before the next intake"
+  }
+}
