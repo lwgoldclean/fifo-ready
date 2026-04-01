@@ -5,6 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fifoready.org"),
   title: "FIFO Ready | Australia's Premier FIFO Training Centre",
   description:
     "Get the knowledge and documentation you need to start your FIFO mining career in Australia. Learn from industry experts and access essential resources.",
