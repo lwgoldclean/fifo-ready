@@ -58,7 +58,7 @@ export default async function HomePage() {
               <CheckoutButton
                 className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg h-auto"
                 size="lg"
-                label="Start Learning — $197 AUD"
+                label="Start Learning — $4.99 AUD (was $59)"
               />
             ) : (
               <Button
@@ -66,7 +66,7 @@ export default async function HomePage() {
                 className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg"
                 asChild
               >
-                <Link href="/register">Start Learning — $197 AUD</Link>
+                <Link href="/register">Start Learning — $4.99 AUD (was $59)</Link>
               </Button>
             )}
             <Button
@@ -162,7 +162,7 @@ export default async function HomePage() {
               {
                 step: "2",
                 title: "One-Time Payment",
-                desc: "Pay once, get lifetime access. No subscriptions, no hidden fees — just $197 AUD.",
+                desc: "Pay once, get lifetime access. No subscriptions, no hidden fees — just $4.99 AUD (limited time, down from $59).",
               },
               {
                 step: "3",
@@ -315,11 +315,15 @@ export default async function HomePage() {
           <div className="mx-auto max-w-lg">
             <Card className="border-2 border-orange-500 shadow-xl">
               <CardContent className="p-6 sm:p-8 text-center">
-                <div className="inline-block rounded-full bg-orange-100 px-4 py-1 text-sm font-semibold text-orange-600 mb-4">
-                  One-Time Payment
+                <div className="inline-block rounded-full bg-red-100 px-4 py-1 text-sm font-semibold text-red-600 mb-4">
+                  ⚡ Limited Time Only
+                </div>
+                <div className="mb-1 flex items-center justify-center gap-3">
+                  <span className="text-2xl text-gray-400 line-through">$59</span>
+                  <span className="text-xs font-semibold text-red-500 bg-red-50 rounded px-2 py-0.5">92% OFF</span>
                 </div>
                 <div className="mb-2">
-                  <span className="text-5xl font-bold text-gray-900">$197</span>
+                  <span className="text-5xl font-bold text-gray-900">$4.99</span>
                   <span className="text-xl text-gray-500 ml-2">AUD</span>
                 </div>
                 <p className="text-gray-500 text-sm mb-6">One-time, no recurring fees</p>
@@ -348,14 +352,14 @@ export default async function HomePage() {
                 ) : session && !hasPaid ? (
                   <CheckoutButton
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg h-auto"
-                    label="Enrol Now — $197 AUD"
+                    label="Enrol Now — $4.99 AUD"
                   />
                 ) : (
                   <Button
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
                     asChild
                   >
-                    <Link href="/register">Enrol Now — $197 AUD</Link>
+                    <Link href="/register">Enrol Now — $4.99 AUD</Link>
                   </Button>
                 )}
                 <p className="mt-4 text-xs text-gray-400">
@@ -400,7 +404,7 @@ export default async function HomePage() {
               },
               {
                 q: "Is this a subscription?",
-                a: "No. You pay $197 AUD once and get lifetime access — including any future content we add. There are no monthly fees, no renewals, no surprises.",
+                a: "No. You pay $4.99 AUD once (limited time, normally $59) and get lifetime access — including any future content we add. There are no monthly fees, no renewals, no surprises.",
               },
             ].map((faq) => (
               <details
@@ -451,7 +455,7 @@ export default async function HomePage() {
                 className="w-full sm:w-auto bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg font-semibold"
                 asChild
               >
-                <Link href="/register">Get Instant Access — $197 AUD</Link>
+                <Link href="/register">Get Instant Access — $4.99 AUD (was $59)</Link>
               </Button>
               <p className="text-orange-200 text-sm">7-day money-back guarantee</p>
             </div>
