@@ -10,7 +10,7 @@ interface CheckoutButtonProps {
   label?: string;
 }
 
-export function CheckoutButton({ className, size, label = "Enrol Now — $197 AUD" }: CheckoutButtonProps) {
+export function CheckoutButton({ className, size, label = "Enrol Now" }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 

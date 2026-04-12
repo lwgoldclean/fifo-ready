@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { HardHat, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CheckoutButton } from "@/components/checkout-button";
 
 type Props = {
   isLoggedIn: boolean;
@@ -41,9 +42,10 @@ export function LandingNav({ isLoggedIn }: Props) {
                   <Button variant="ghost" asChild>
                     <Link href="/login">Sign In</Link>
                   </Button>
-                  <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white">
-                    <Link href="/register">Get Started</Link>
-                  </Button>
+                  <CheckoutButton
+                    className="bg-orange-500 hover:bg-orange-600 text-white"
+                    label="Get Access"
+                  />
                 </>
               )}
             </div>
@@ -132,9 +134,10 @@ export function LandingNav({ isLoggedIn }: Props) {
             </Button>
           ) : (
             <>
-              <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white" asChild>
-                <Link href="/register">Get Started — $197 AUD</Link>
-              </Button>
+              <CheckoutButton
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white h-10"
+                label="Get Access — $4.99 AUD"
+              />
               <Button variant="outline" className="w-full" asChild>
                 <Link href="/login">Sign In</Link>
               </Button>

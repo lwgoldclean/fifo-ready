@@ -24,9 +24,9 @@ export default function LoginPage() {
               <LoginForm />
             </Suspense>
             <p className="mt-6 text-center text-sm text-gray-500">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="font-medium text-orange-600 hover:text-orange-500">
-                Register here
+              New here?{" "}
+              <Link href="/#pricing" className="font-medium text-orange-600 hover:text-orange-500">
+                Get access for $4.99
               </Link>
             </p>
           </CardContent>

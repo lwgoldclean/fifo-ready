@@ -38,15 +38,11 @@ export function StickyCTA({ isLoggedIn, hasPaid }: Props) {
           <Button className="bg-orange-500 hover:bg-orange-600 text-white shrink-0" asChild>
             <Link href="/dashboard">Dashboard</Link>
           </Button>
-        ) : isLoggedIn && !hasPaid ? (
+        ) : (
           <CheckoutButton
             className="bg-orange-500 hover:bg-orange-600 text-white shrink-0 h-10"
             label="Enrol Now"
           />
-        ) : (
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white shrink-0" asChild>
-            <Link href="/register">Enrol Now</Link>
-          </Button>
         )}
       </div>
     </div>

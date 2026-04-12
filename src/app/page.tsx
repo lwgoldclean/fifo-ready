@@ -61,13 +61,11 @@ export default async function HomePage() {
                 label="Start Learning — $4.99 AUD (was $59)"
               />
             ) : (
-              <Button
+              <CheckoutButton
+                className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg h-auto"
                 size="lg"
-                className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg"
-                asChild
-              >
-                <Link href="/register">Start Learning — $4.99 AUD (was $59)</Link>
-              </Button>
+                label="Start Learning — $4.99 AUD (was $59)"
+              />
             )}
             <Button
               size="lg"
@@ -156,8 +154,8 @@ export default async function HomePage() {
             {[
               {
                 step: "1",
-                title: "Create Your Account",
-                desc: "Sign up in seconds. No credit card required until you're ready to enrol.",
+                title: "Pay & Get Instant Access",
+                desc: "Secure one-time payment via Stripe. No account needed upfront — you'll set your password right after checkout.",
               },
               {
                 step: "2",
@@ -355,12 +353,10 @@ export default async function HomePage() {
                     label="Enrol Now — $4.99 AUD"
                   />
                 ) : (
-                  <Button
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
-                    asChild
-                  >
-                    <Link href="/register">Enrol Now — $4.99 AUD</Link>
-                  </Button>
+                  <CheckoutButton
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg h-auto"
+                    label="Enrol Now — $4.99 AUD"
+                  />
                 )}
                 <p className="mt-4 text-xs text-gray-400">
                   Secure payment via Stripe. Australian GST included.
@@ -449,14 +445,12 @@ export default async function HomePage() {
               label="Get Instant Access"
             />
           ) : (
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Button
+            <div className="flex flex-col items-center gap-3">
+              <CheckoutButton
                 size="lg"
-                className="w-full sm:w-auto bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg font-semibold"
-                asChild
-              >
-                <Link href="/register">Get Instant Access — $4.99 AUD (was $59)</Link>
-              </Button>
+                className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg font-semibold h-auto"
+                label="Get Instant Access — $4.99 AUD (was $59)"
+              />
               <p className="text-orange-200 text-sm">7-day money-back guarantee</p>
             </div>
           )}
@@ -473,7 +467,6 @@ export default async function HomePage() {
             </div>
             <div className="flex gap-6 text-sm text-gray-400">
               <Link href="/login" className="hover:text-white">Sign In</Link>
-              <Link href="/register" className="hover:text-white">Register</Link>
               <a href="mailto:support@fifoready.org" className="hover:text-white">Support</a>
             </div>
             <p className="text-sm text-gray-500">© {new Date().getFullYear()} FIFO Ready. All rights reserved.</p>

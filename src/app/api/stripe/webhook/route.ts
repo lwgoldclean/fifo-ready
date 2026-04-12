@@ -28,26 +28,50 @@ export async function POST(req: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId;
 
-    if (!userId) {
-      return NextResponse.json({ error: "No userId" }, { status: 400 });
+    if (userId) {
+      // Logged-in user checkout
+      await db.$transaction([
+        db.purchase.create({
+          data: {
+            userId,
+            stripeSessionId: session.id,
+            stripePaymentIntentId: session.payment_intent as string,
+            amount: session.amount_total ?? 0,
+            currency: session.currency ?? "aud",
+            status: "COMPLETED",
+          },
+        }),
+        db.user.update({
+          where: { id: userId },
+          data: { hasPaid: true },
+        }),
+      ]);
+    } else {
+      // Guest checkout — find existing user by email and mark as paid if found.
+      // If the user doesn't have an account yet, the /welcome page handles creation.
+      const email = session.customer_details?.email;
+      if (email) {
+        const user = await db.user.findUnique({ where: { email } });
+        if (user && !user.hasPaid) {
+          await db.$transaction([
+            db.purchase.create({
+              data: {
+                userId: user.id,
+                stripeSessionId: session.id,
+                stripePaymentIntentId: session.payment_intent as string,
+                amount: session.amount_total ?? 0,
+                currency: session.currency ?? "aud",
+                status: "COMPLETED",
+              },
+            }),
+            db.user.update({
+              where: { id: user.id },
+              data: { hasPaid: true, stripeCustomerId: session.customer as string },
+            }),
+          ]);
+        }
+      }
     }
-
-    await db.$transaction([
-      db.purchase.create({
-        data: {
-          userId,
-          stripeSessionId: session.id,
-          stripePaymentIntentId: session.payment_intent as string,
-          amount: session.amount_total ?? 0,
-          currency: session.currency ?? "aud",
-          status: "COMPLETED",
-        },
-      }),
-      db.user.update({
-        where: { id: userId },
-        data: { hasPaid: true },
-      }),
-    ]);
   }
 
   if (event.type === "charge.refunded") {
