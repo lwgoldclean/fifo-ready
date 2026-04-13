@@ -36,14 +36,14 @@ export default async function HomePage() {
             Australia&apos;s #1 FIFO Preparation Training
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            Start Your{" "}
-            <span className="text-orange-400">FIFO Mining Career</span>
-            {" "}Today
+            Land Your First{" "}
+            <span className="text-orange-400">FIFO Mining Job</span>
+            {" "}— Fully Prepared
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-300 max-w-2xl mx-auto">
-            Get every document, guide, and resource you need to land your first FIFO role.
-            Our comprehensive training centre covers everything from safety certificates
-            to interview prep — all in one place.
+            Every document, certification guide, and industry resource you need —
+            in one place. Join 2,400+ Australians who used FIFO Ready to walk into
+            their first site interview with total confidence.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             {session && hasPaid ? (
@@ -58,13 +58,13 @@ export default async function HomePage() {
               <CheckoutButton
                 className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg h-auto"
                 size="lg"
-                label="Start Learning — $4.99 AUD (was $59)"
+                label="Get Instant Access — $4.99 AUD"
               />
             ) : (
               <CheckoutButton
                 className="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white px-8 py-6 text-lg h-auto"
                 size="lg"
-                label="Start Learning — $4.99 AUD (was $59)"
+                label="Get Instant Access — $4.99 AUD"
               />
             )}
             <Button
@@ -84,7 +84,7 @@ export default async function HomePage() {
               <CheckCircle className="h-4 w-4 text-green-400" /> Instant access after payment
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle className="h-4 w-4 text-green-400" /> Australian-focused content
+              <CheckCircle className="h-4 w-4 text-green-400" /> 7-day money-back guarantee
             </span>
           </div>
         </div>
@@ -154,18 +154,18 @@ export default async function HomePage() {
             {[
               {
                 step: "1",
-                title: "Pay & Get Instant Access",
-                desc: "Secure one-time payment via Stripe. No account needed upfront — you'll set your password right after checkout.",
+                title: "One-Time Payment",
+                desc: "Pay $4.99 AUD once via Stripe. No subscriptions, no hidden fees. No account needed upfront.",
               },
               {
                 step: "2",
-                title: "One-Time Payment",
-                desc: "Pay once, get lifetime access. No subscriptions, no hidden fees — just $4.99 AUD (limited time, down from $59).",
+                title: "Set Up Your Account",
+                desc: "You'll get an email to set your password right after checkout. Takes 60 seconds.",
               },
               {
                 step: "3",
-                title: "Access Everything",
-                desc: "Instantly unlock all training documents, quizzes, and resources in your dashboard.",
+                title: "Access Everything Instantly",
+                desc: "Unlock all 50+ training documents, knowledge quizzes, and career resources in your dashboard — for life.",
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
@@ -250,8 +250,8 @@ export default async function HomePage() {
       <section className="py-20 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">What Our Students Say</h2>
-            <p className="mt-3 text-gray-500">Real people. Real results.</p>
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Real Students. Real Results.</h2>
+            <p className="mt-3 text-gray-500">See what happened after they got FIFO Ready.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
@@ -307,14 +307,14 @@ export default async function HomePage() {
       <section id="pricing" className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Simple, Honest Pricing</h2>
-            <p className="mt-4 text-lg text-gray-500">One payment. Lifetime access. No surprises.</p>
+            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">One Payment. Everything You Need.</h2>
+            <p className="mt-4 text-lg text-gray-500">Lifetime access. No subscriptions. No surprises.</p>
           </div>
           <div className="mx-auto max-w-lg">
             <Card className="border-2 border-orange-500 shadow-xl">
               <CardContent className="p-6 sm:p-8 text-center">
                 <div className="inline-block rounded-full bg-red-100 px-4 py-1 text-sm font-semibold text-red-600 mb-4">
-                  ⚡ Limited Time Only
+                  ⚡ Limited Time — Price Goes Up Soon
                 </div>
                 <div className="mb-1 flex items-center justify-center gap-3">
                   <span className="text-2xl text-gray-400 line-through">$59</span>
@@ -324,14 +324,14 @@ export default async function HomePage() {
                   <span className="text-5xl font-bold text-gray-900">$4.99</span>
                   <span className="text-xl text-gray-500 ml-2">AUD</span>
                 </div>
-                <p className="text-gray-500 text-sm mb-6">One-time, no recurring fees</p>
+                <p className="text-gray-500 text-sm mb-6">One-time payment. Yours forever.</p>
                 <ul className="text-left space-y-3 mb-8">
                   {[
-                    "Full document library access",
-                    "All knowledge quizzes",
-                    "Career planning resources",
-                    "Lifetime access — including future updates",
-                    "Instant access after payment",
+                    "50+ training documents — instantly unlocked",
+                    "All knowledge quizzes (safety, site, industry)",
+                    "Top FIFO employers directory + interview bank",
+                    "Lifetime access — including all future updates",
+                    "Mobile-friendly — study anywhere, anytime",
                     "Support via email",
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-sm text-gray-700">
@@ -350,19 +350,19 @@ export default async function HomePage() {
                 ) : session && !hasPaid ? (
                   <CheckoutButton
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg h-auto"
-                    label="Enrol Now — $4.99 AUD"
+                    label="Get Instant Access — $4.99 AUD"
                   />
                 ) : (
                   <CheckoutButton
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg h-auto"
-                    label="Enrol Now — $4.99 AUD"
+                    label="Get Instant Access — $4.99 AUD"
                   />
                 )}
                 <p className="mt-4 text-xs text-gray-400">
-                  Secure payment via Stripe. Australian GST included.
+                  Secure payment via Stripe · Australian GST included
                 </p>
-                <p className="mt-2 text-xs text-gray-500 font-medium">
-                  ✓ Not satisfied? Email us within 7 days for a full refund.
+                <p className="mt-2 text-sm text-gray-600 font-medium">
+                  🛡️ 7-day money-back guarantee — no questions asked
                 </p>
               </CardContent>
             </Card>
@@ -420,15 +420,41 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Lead Magnet — for visitors who aren't ready to buy yet */}
+      <section className="py-14 bg-amber-50 border-y border-amber-100">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-amber-600 mb-3">
+            Not ready to commit yet?
+          </p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+            Grab the free FIFO Fast-Track Guide
+          </h2>
+          <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+            The exact 5 steps 2,400+ Aussies took to land their first mining role —
+            delivered to your inbox in seconds. No credit card. No spam.
+          </p>
+          <Link
+            href="/free"
+            className="inline-block bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold px-8 py-4 rounded-xl text-base transition-colors"
+          >
+            Send Me the Free Guide →
+          </Link>
+          <p className="text-xs text-gray-400 mt-3">
+            Takes 30 seconds. Unsubscribe any time.
+          </p>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-20 bg-gradient-to-r from-orange-500 to-orange-600">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <Users className="mx-auto h-12 w-12 text-white/80 mb-4" />
           <h2 className="text-3xl font-bold text-white sm:text-4xl mb-4">
-            Ready to Start Your FIFO Journey?
+            Your FIFO Career Starts With One Decision
           </h2>
           <p className="text-lg text-orange-100 mb-8">
-            Join thousands of Australians who have used FIFO Ready to launch their mining careers.
+            2,400+ Australians chose to get prepared. It cost them $4.99.
+            Most were working on site within 6 weeks.
           </p>
           {session && hasPaid ? (
             <Button
@@ -442,7 +468,7 @@ export default async function HomePage() {
             <CheckoutButton
               className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg font-semibold h-auto"
               size="lg"
-              label="Get Instant Access"
+              label="Get Instant Access — $4.99 AUD"
             />
           ) : (
             <div className="flex flex-col items-center gap-3">
@@ -451,7 +477,7 @@ export default async function HomePage() {
                 className="bg-white text-orange-600 hover:bg-orange-50 px-8 py-6 text-lg font-semibold h-auto"
                 label="Get Instant Access — $4.99 AUD (was $59)"
               />
-              <p className="text-orange-200 text-sm">7-day money-back guarantee</p>
+              <p className="text-orange-200 text-sm">7-day money-back guarantee · No subscription</p>
             </div>
           )}
         </div>
