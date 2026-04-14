@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Link from "next/link";
+import { MetaPixelPurchase } from "@/components/meta-pixel-purchase";
 import { FileText, ClipboardList, CheckCircle, Trophy, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,9 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { formatDate } from "@/lib/utils";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
   const session = await auth();
   if (!session?.user) return null;
+
+  const { success } = await searchParams;
 
   const [documents, quizzes, attempts] = await Promise.all([
     db.document.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
@@ -33,6 +40,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="p-8">
+      {success === "true" && <MetaPixelPurchase />}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">
           Welcome back, {session.user.name?.split(" ")[0] ?? "Mate"}!

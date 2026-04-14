@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { HardHat, CheckCircle } from "lucide-react";
 import { stripe } from "@/lib/stripe";
 import { SetPasswordForm } from "./set-password-form";
+import { MetaPixelPurchase } from "@/components/meta-pixel-purchase";
 
 export default async function WelcomePage({
   searchParams,
@@ -33,6 +34,7 @@ export default async function WelcomePage({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-12">
+      <MetaPixelPurchase />
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-8">

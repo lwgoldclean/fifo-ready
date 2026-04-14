@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { sendPurchaseNotification } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -46,6 +47,9 @@ export async function POST(req: Request) {
           data: { hasPaid: true },
         }),
       ]);
+      const buyerEmail = session.customer_details?.email ?? "unknown";
+      const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
+      await sendPurchaseNotification(buyerEmail, amount).catch(console.error);
     } else {
       // Guest checkout — find existing user by email and mark as paid if found.
       // If the user doesn't have an account yet, the /welcome page handles creation.
@@ -69,6 +73,8 @@ export async function POST(req: Request) {
               data: { hasPaid: true, stripeCustomerId: session.customer as string },
             }),
           ]);
+          const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
+          await sendPurchaseNotification(email, amount).catch(console.error);
         }
       }
     }
