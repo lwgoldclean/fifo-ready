@@ -24,17 +24,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (dbUser) {
           token.role = dbUser.role;
           token.hasPaid = dbUser.hasPaid;
+          token.stripeCustomerId = dbUser.stripeCustomerId;
         }
       }
-      // Re-check hasPaid on each request for unpaid users so Stripe payment
-      // is reflected immediately without requiring a re-login.
+      // Re-check hasPaid (and stripeCustomerId) on each request for unpaid users
+      // so Stripe payment is reflected immediately without requiring a re-login.
       if (token.id && !token.hasPaid) {
         const dbUser = await db.user.findUnique({
           where: { id: token.id as string },
-          select: { hasPaid: true },
+          select: { hasPaid: true, stripeCustomerId: true },
         });
         if (dbUser?.hasPaid) {
           token.hasPaid = true;
+        }
+        if (dbUser?.stripeCustomerId && !token.stripeCustomerId) {
+          token.stripeCustomerId = dbUser.stripeCustomerId;
         }
       }
       return token;
@@ -44,6 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.hasPaid = token.hasPaid as boolean;
+        session.user.stripeCustomerId = token.stripeCustomerId;
       }
       return session;
     },

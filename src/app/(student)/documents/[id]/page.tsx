@@ -5,21 +5,38 @@ import { ArrowLeft, Download, ExternalLink, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatBytes, formatDate } from "@/lib/utils";
+import { PrintButton } from "@/components/print-button";
+import { auth } from "@/lib/auth";
+import { ResumeReviewBanner } from "@/components/resume-review-banner";
 
 export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const doc = await db.document.findUnique({
-    where: { id, published: true },
-  });
+  const [doc, session] = await Promise.all([
+    db.document.findUnique({ where: { id, published: true } }),
+    auth(),
+  ]);
 
   if (!doc) notFound();
+
+  const showResumeReviewBanner =
+    doc.title.toLowerCase().includes("resume") || doc.category === "Templates";
+
+  const alreadyPurchasedResumeReview = showResumeReviewBanner && session?.user?.id
+    ? !!(await db.purchase.findFirst({
+        where: {
+          userId: session.user.id,
+          productType: "resume_review",
+          status: "COMPLETED",
+        },
+      }))
+    : false;
 
   return (
     <div className="p-8 max-w-4xl">
       <Link
         href="/documents"
-        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6"
+        className="print:hidden flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-6"
       >
         <ArrowLeft className="h-4 w-4" /> Back to Documents
       </Link>
@@ -45,21 +62,31 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
           </div>
         </div>
 
-        {doc.fileUrl && (
-          <div className="flex gap-3 mt-4">
-            <Button variant="outline" size="sm" asChild>
-              <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 mr-2" /> View PDF
-              </a>
-            </Button>
-            <Button size="sm" className="bg-orange-500 hover:bg-orange-600" asChild>
-              <a href={doc.fileUrl} download>
-                <Download className="h-4 w-4 mr-2" /> Download
-              </a>
-            </Button>
-          </div>
-        )}
+        <div className="print:hidden flex gap-3 mt-4">
+          {doc.fileUrl && (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4 mr-2" /> View PDF
+                </a>
+              </Button>
+              <Button size="sm" className="bg-orange-500 hover:bg-orange-600" asChild>
+                <a href={doc.fileUrl} download>
+                  <Download className="h-4 w-4 mr-2" /> Download
+                </a>
+              </Button>
+            </>
+          )}
+          {doc.content && <PrintButton />}
+        </div>
       </div>
+
+      {/* Resume Review Upsell */}
+      {showResumeReviewBanner && (
+        <div className="mb-6 print:hidden">
+          <ResumeReviewBanner alreadyPurchased={alreadyPurchasedResumeReview} />
+        </div>
+      )}
 
       {/* Content */}
       {doc.content ? (

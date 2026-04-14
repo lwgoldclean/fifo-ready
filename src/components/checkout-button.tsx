@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -10,20 +10,45 @@ interface CheckoutButtonProps {
   label?: string;
 }
 
+// Module-level singleton — shared across all CheckoutButton instances on the page.
+// Kicks off a single prefetch request immediately on first mount, so by the time
+// the user clicks, the Stripe session URL is already in hand.
+let _prefetchPromise: Promise<string | null> | null = null;
+
+function prefetchCheckoutUrl(): Promise<string | null> {
+  if (!_prefetchPromise) {
+    _prefetchPromise = fetch("/api/stripe/checkout", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => (typeof d.url === "string" ? d.url : null))
+      .catch(() => null);
+  }
+  return _prefetchPromise;
+}
+
 export function CheckoutButton({ className, size, label = "Enrol Now" }: CheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const prefetchedUrl = useRef<string | null>(null);
+
+  // Start prefetching immediately on mount — all instances share one request.
+  useEffect(() => {
+    prefetchCheckoutUrl().then((url) => {
+      prefetchedUrl.current = url;
+    });
+  }, []);
 
   async function handleClick() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/stripe/checkout", { method: "POST" });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
+      // If the URL is already prefetched, redirect instantly (no network wait).
+      const url = prefetchedUrl.current ?? (await prefetchCheckoutUrl());
+      if (url) {
+        // Reset singleton so a fresh session is fetched on next page load.
+        _prefetchPromise = null;
+        window.location.href = url;
       } else {
-        setError(data.error || "Could not start checkout. Please try again.");
+        setError("Could not start checkout. Please try again.");
         setLoading(false);
       }
     } catch {

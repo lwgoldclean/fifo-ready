@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
-import { sendPurchaseNotification } from "@/lib/email";
+import { sendPurchaseNotification, sendResumeReviewAdminNotification, sendResumeReviewConfirmation } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -28,9 +28,28 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId;
+    const productType = session.metadata?.productType ?? "course";
 
-    if (userId) {
-      // Logged-in user checkout
+    if (productType === "resume_review" && userId) {
+      // Resume review upsell — record the purchase but do NOT set hasPaid
+      await db.purchase.create({
+        data: {
+          userId,
+          stripeSessionId: session.id,
+          stripePaymentIntentId: session.payment_intent as string,
+          amount: session.amount_total ?? 0,
+          currency: session.currency ?? "aud",
+          status: "COMPLETED",
+          productType: "resume_review",
+        },
+      });
+      const user = await db.user.findUnique({ where: { id: userId }, select: { name: true, email: true } });
+      const buyerName = user?.name ?? "Student";
+      const buyerEmail = user?.email ?? session.customer_details?.email ?? "";
+      await sendResumeReviewAdminNotification(buyerName, buyerEmail).catch(console.error);
+      await sendResumeReviewConfirmation(buyerName, buyerEmail).catch(console.error);
+    } else if (userId) {
+      // Logged-in user course checkout
       await db.$transaction([
         db.purchase.create({
           data: {
@@ -40,6 +59,7 @@ export async function POST(req: Request) {
             amount: session.amount_total ?? 0,
             currency: session.currency ?? "aud",
             status: "COMPLETED",
+            productType: "course",
           },
         }),
         db.user.update({
@@ -66,6 +86,7 @@ export async function POST(req: Request) {
                 amount: session.amount_total ?? 0,
                 currency: session.currency ?? "aud",
                 status: "COMPLETED",
+                productType: "course",
               },
             }),
             db.user.update({

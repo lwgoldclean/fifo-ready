@@ -76,6 +76,7 @@ model Purchase {
   amount            Int      // in cents
   currency          String   @default("aud")
   status            PurchaseStatus @default(PENDING)
+  productType       String?  @default("course")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

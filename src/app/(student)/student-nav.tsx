@@ -88,7 +88,7 @@ export function StudentNav({ user, isAdmin, signOutAction, children }: Props) {
   return (
     <div className="min-h-screen flex bg-gray-50">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 bg-white border-r flex-col shrink-0">
+      <aside className="hidden md:flex print:hidden w-64 bg-white border-r flex-col shrink-0">
         <div className="flex items-center gap-2 p-6 border-b">
           <HardHat className="h-6 w-6 text-orange-500" />
           <span className="font-bold text-gray-900">FIFO Ready</span>
@@ -97,7 +97,7 @@ export function StudentNav({ user, isAdmin, signOutAction, children }: Props) {
       </aside>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-30 bg-white border-b flex items-center justify-between px-4 h-14 shadow-sm">
+      <div className="md:hidden print:hidden fixed top-0 left-0 right-0 z-30 bg-white border-b flex items-center justify-between px-4 h-14 shadow-sm">
         <div className="flex items-center gap-2">
           <HardHat className="h-5 w-5 text-orange-500" />
           <span className="font-bold text-gray-900">FIFO Ready</span>
@@ -143,7 +143,7 @@ export function StudentNav({ user, isAdmin, signOutAction, children }: Props) {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto pt-14 md:pt-0">
+      <main className="flex-1 overflow-auto pt-14 md:pt-0 print:pt-0">
         {children}
       </main>
     </div>

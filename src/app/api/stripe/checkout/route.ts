@@ -13,13 +13,14 @@ export async function POST() {
         return NextResponse.json({ error: "Already enrolled" }, { status: 400 });
       }
 
-      const user = await db.user.findUnique({ where: { id: session.user.id } });
-      if (!user) {
-        return NextResponse.json({ error: "User not found" }, { status: 404 });
-      }
-
-      let customerId = user.stripeCustomerId;
+      // Use the customer ID cached in the JWT token to skip a DB roundtrip.
+      let customerId = session.user.stripeCustomerId ?? null;
       if (!customerId) {
+        // First checkout: fetch user details, create Stripe customer, and cache it.
+        const user = await db.user.findUnique({ where: { id: session.user.id } });
+        if (!user) {
+          return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
         const customer = await stripe.customers.create({
           email: user.email!,
           name: user.name ?? undefined,
@@ -39,7 +40,7 @@ export async function POST() {
         line_items: [{ price: process.env.STRIPE_PRICE_ID!, quantity: 1 }],
         success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/#pricing`,
-        metadata: { userId: user.id },
+        metadata: { userId: session.user.id },
       });
 
       return NextResponse.json({ url: checkoutSession.url });
