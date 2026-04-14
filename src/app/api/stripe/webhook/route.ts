@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
-import { sendPurchaseNotification, sendResumeReviewAdminNotification, sendResumeReviewConfirmation } from "@/lib/email";
+import { sendPurchaseNotification, sendResumeReviewAdminNotification, sendResumeReviewConfirmation, sendIndustryCallAdminNotification, sendIndustryCallConfirmation } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -30,7 +30,25 @@ export async function POST(req: Request) {
     const userId = session.metadata?.userId;
     const productType = session.metadata?.productType ?? "course";
 
-    if (productType === "resume_review" && userId) {
+    if (productType === "industry_call" && userId) {
+      // Industry call upsell — record purchase, send emails with Calendly link
+      await db.purchase.create({
+        data: {
+          userId,
+          stripeSessionId: session.id,
+          stripePaymentIntentId: session.payment_intent as string,
+          amount: session.amount_total ?? 0,
+          currency: session.currency ?? "aud",
+          status: "COMPLETED",
+          productType: "industry_call",
+        },
+      });
+      const user = await db.user.findUnique({ where: { id: userId }, select: { name: true, email: true } });
+      const buyerName = user?.name ?? "Student";
+      const buyerEmail = user?.email ?? session.customer_details?.email ?? "";
+      await sendIndustryCallAdminNotification(buyerName, buyerEmail).catch(console.error);
+      await sendIndustryCallConfirmation(buyerName, buyerEmail, process.env.CALENDLY_URL ?? "").catch(console.error);
+    } else if (productType === "resume_review" && userId) {
       // Resume review upsell — record the purchase but do NOT set hasPaid
       await db.purchase.create({
         data: {

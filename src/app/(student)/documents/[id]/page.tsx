@@ -8,6 +8,7 @@ import { formatBytes, formatDate } from "@/lib/utils";
 import { PrintButton } from "@/components/print-button";
 import { auth } from "@/lib/auth";
 import { ResumeReviewBanner } from "@/components/resume-review-banner";
+import { IndustryCallCard } from "@/components/industry-call-card";
 
 export default async function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -22,15 +23,20 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
   const showResumeReviewBanner =
     doc.title.toLowerCase().includes("resume") || doc.category === "Templates";
 
-  const alreadyPurchasedResumeReview = showResumeReviewBanner && session?.user?.id
-    ? !!(await db.purchase.findFirst({
-        where: {
-          userId: session.user.id,
-          productType: "resume_review",
-          status: "COMPLETED",
-        },
-      }))
-    : false;
+  const showIndustryCallBanner = doc.title.toLowerCase().includes("interview");
+
+  const [alreadyPurchasedResumeReview, alreadyPurchasedIndustryCall] = await Promise.all([
+    showResumeReviewBanner && session?.user?.id
+      ? db.purchase.findFirst({
+          where: { userId: session.user.id, productType: "resume_review", status: "COMPLETED" },
+        }).then(Boolean)
+      : Promise.resolve(false),
+    showIndustryCallBanner && session?.user?.id
+      ? db.purchase.findFirst({
+          where: { userId: session.user.id, productType: "industry_call", status: "COMPLETED" },
+        }).then(Boolean)
+      : Promise.resolve(false),
+  ]);
 
   return (
     <div className="p-8 max-w-4xl">
@@ -84,7 +90,14 @@ export default async function DocumentPage({ params }: { params: Promise<{ id: s
       {/* Resume Review Upsell */}
       {showResumeReviewBanner && (
         <div className="mb-6 print:hidden">
-          <ResumeReviewBanner alreadyPurchased={alreadyPurchasedResumeReview} />
+          <ResumeReviewBanner alreadyPurchased={!!alreadyPurchasedResumeReview} />
+        </div>
+      )}
+
+      {/* Industry Call Upsell */}
+      {showIndustryCallBanner && (
+        <div className="mb-6 print:hidden">
+          <IndustryCallCard variant="banner" alreadyPurchased={!!alreadyPurchasedIndustryCall} />
         </div>
       )}
 

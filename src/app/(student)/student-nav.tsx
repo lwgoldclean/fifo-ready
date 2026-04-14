@@ -13,6 +13,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { IndustryCallCard } from "@/components/industry-call-card";
 
 type User = {
   name?: string | null;
@@ -22,6 +23,7 @@ type User = {
 type Props = {
   user: User;
   isAdmin: boolean;
+  hasIndustryCall: boolean;
   signOutAction: () => Promise<void>;
   children: React.ReactNode;
 };
@@ -32,7 +34,7 @@ const navItems = [
   { href: "/quizzes", label: "Quizzes", icon: ClipboardList },
 ];
 
-export function StudentNav({ user, isAdmin, signOutAction, children }: Props) {
+export function StudentNav({ user, isAdmin, hasIndustryCall, signOutAction, children }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
@@ -67,6 +69,7 @@ export function StudentNav({ user, isAdmin, signOutAction, children }: Props) {
           </Link>
         )}
       </nav>
+      <IndustryCallCard variant="sidebar" alreadyPurchased={hasIndustryCall} />
       <div className="p-4 border-t space-y-1">
         <div className="px-3 py-2 mb-2">
           <p className="text-xs font-medium text-gray-900 truncate">{user.name}</p>

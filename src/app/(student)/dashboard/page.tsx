@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { formatDate } from "@/lib/utils";
+import { IndustryCallCard } from "@/components/industry-call-card";
 
 export default async function DashboardPage({
   searchParams,
@@ -19,14 +20,19 @@ export default async function DashboardPage({
 
   const { success } = await searchParams;
 
-  const [documents, quizzes, attempts] = await Promise.all([
+  const [documents, quizzes, attempts, industryCallPurchase] = await Promise.all([
     db.document.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
     db.quiz.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
     db.quizAttempt.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
     }),
+    db.purchase.findFirst({
+      where: { userId: session.user.id, productType: "industry_call", status: "COMPLETED" },
+    }),
   ]);
+
+  const hasIndustryCall = !!industryCallPurchase;
 
   const passedQuizIds = new Set(
     attempts.filter((a) => a.passed).map((a) => a.quizId)
@@ -113,6 +119,11 @@ export default async function DashboardPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Industry Call Upsell */}
+      <div className="mb-6">
+        <IndustryCallCard variant="dashboard" alreadyPurchased={hasIndustryCall} />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Documents */}
