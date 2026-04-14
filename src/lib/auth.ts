@@ -48,7 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.id = token.id as string;
         session.user.role = token.role as string;
         session.user.hasPaid = token.hasPaid as boolean;
-        session.user.stripeCustomerId = token.stripeCustomerId;
+        session.user.stripeCustomerId = token.stripeCustomerId as string | null | undefined;
       }
       return session;
     },
