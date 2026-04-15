@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Menu,
   X,
+  MessageSquare,
 } from "lucide-react";
 import { IndustryCallCard } from "@/components/industry-call-card";
 
@@ -32,6 +33,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/documents", label: "Documents", icon: FileText },
   { href: "/quizzes", label: "Quizzes", icon: ClipboardList },
+  { href: "/contact", label: "Contact", icon: MessageSquare },
 ];
 
 export function StudentNav({ user, isAdmin, hasIndustryCall, signOutAction, children }: Props) {

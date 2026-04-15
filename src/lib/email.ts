@@ -136,6 +136,69 @@ export async function sendPurchaseNotification(buyerEmail: string, amountAud: st
   });
 }
 
+export async function sendContactNotification(
+  studentName: string,
+  studentEmail: string,
+  subject: string,
+  message: string
+) {
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: process.env.ADMIN_EMAIL!,
+    replyTo: studentEmail,
+    subject: `Student message: ${subject} — ${studentName}`,
+    html: `<p style="font-family:Arial,sans-serif;font-size:16px;">
+      Message from a student on <strong>FIFO Ready</strong>.<br><br>
+      <strong>Name:</strong> ${studentName}<br>
+      <strong>Email:</strong> ${studentEmail}<br>
+      <strong>Subject:</strong> ${subject}<br><br>
+      <strong>Message:</strong><br>
+      ${message.replace(/\n/g, "<br>")}
+    </p>`,
+  });
+}
+
+export async function sendContactConfirmation(
+  studentName: string,
+  studentEmail: string,
+  subject: string
+) {
+  const firstName = studentName.split(" ")[0];
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: studentEmail,
+    replyTo: process.env.ADMIN_EMAIL!,
+    subject: "Got your message — FIFO Ready",
+    html: `<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f9fafb;margin:0;padding:40px 20px;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
+    <div style="background:#1C1917;padding:28px 32px;text-align:center;">
+      <p style="color:#F59E0B;font-weight:bold;font-size:20px;margin:0;">⛏ FIFO Ready</p>
+    </div>
+    <div style="padding:32px;">
+      <h1 style="font-size:22px;font-weight:bold;color:#111827;margin-top:0;">
+        G'day ${firstName}, message received!
+      </h1>
+      <p style="color:#4B5563;line-height:1.6;">
+        Thanks for reaching out. I've received your message about <strong>${subject}</strong> and will get back to you within 24–48 hours.
+      </p>
+      <p style="color:#4B5563;line-height:1.6;">
+        You can reply directly to this email if you have anything to add.
+      </p>
+      <p style="color:#4B5563;line-height:1.6;">— Will, FIFO Ready</p>
+    </div>
+    <div style="background:#F9FAFB;padding:20px 32px;border-top:1px solid #E5E7EB;">
+      <p style="color:#9CA3AF;font-size:12px;margin:0;text-align:center;">
+        fifoready.com.au
+      </p>
+    </div>
+  </div>
+</body>
+</html>`,
+  });
+}
+
 export async function sendLeadEmail(
   to: string,
   firstName: string,
