@@ -30,7 +30,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const body = await req.json();
     const data = updateSchema.parse(body);
     const document = await db.document.update({ where: { id }, data });
-    revalidateTag("documents");
+    revalidateTag("documents", {});
     return NextResponse.json(document);
   } catch {
     return NextResponse.json({ error: "Failed to update document" }, { status: 500 });
@@ -44,6 +44,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const { id } = await params;
 
   await db.document.delete({ where: { id } });
-  revalidateTag("documents");
+  revalidateTag("documents", {});
   return NextResponse.json({ success: true });
 }

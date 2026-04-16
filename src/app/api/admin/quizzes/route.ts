@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       include: { questions: true },
     });
 
-    revalidateTag("quizzes");
+    revalidateTag("quizzes", {});
     return NextResponse.json(quiz, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

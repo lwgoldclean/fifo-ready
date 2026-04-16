@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         fileUrl: data.fileUrl || null,
       },
     });
-    revalidateTag("documents");
+    revalidateTag("documents", {});
     return NextResponse.json(document, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
