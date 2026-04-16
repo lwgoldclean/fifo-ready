@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
@@ -55,6 +56,7 @@ export async function POST(req: Request) {
       include: { questions: true },
     });
 
+    revalidateTag("quizzes");
     return NextResponse.json(quiz, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

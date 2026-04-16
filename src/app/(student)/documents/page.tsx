@@ -1,5 +1,5 @@
-import { db } from "@/lib/db";
 import Link from "next/link";
+import { getCachedDocuments } from "@/lib/cache";
 import { FileText, Download, ExternalLink, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +7,7 @@ import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/lib/utils";
 
 export default async function DocumentsPage() {
-  const documents = await db.document.findMany({
-    where: { published: true },
-    orderBy: { order: "asc" },
-  });
+  const documents = await getCachedDocuments();
 
   const categories = Array.from(new Set(documents.map((d) => d.category).filter(Boolean))) as string[];
 

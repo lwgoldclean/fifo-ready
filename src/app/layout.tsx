@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fifoready.org"),
@@ -27,11 +27,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://js.stripe.com" />
         <link rel="dns-prefetch" href="https://js.stripe.com" />
         <link rel="preconnect" href="https://q.stripe.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
         {children}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-TQSKG5L9BF" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">{`
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-TQSKG5L9BF" strategy="lazyOnload" />
+        <Script id="google-analytics" strategy="lazyOnload">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());

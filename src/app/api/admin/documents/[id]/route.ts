@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
@@ -29,6 +30,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const body = await req.json();
     const data = updateSchema.parse(body);
     const document = await db.document.update({ where: { id }, data });
+    revalidateTag("documents");
     return NextResponse.json(document);
   } catch {
     return NextResponse.json({ error: "Failed to update document" }, { status: 500 });
@@ -42,5 +44,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const { id } = await params;
 
   await db.document.delete({ where: { id } });
+  revalidateTag("documents");
   return NextResponse.json({ success: true });
 }

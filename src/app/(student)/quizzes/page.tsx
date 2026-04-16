@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { getCachedQuizzesWithCount } from "@/lib/cache";
 import Link from "next/link";
 import { ClipboardList, CheckCircle, XCircle, Clock, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,14 +13,11 @@ export default async function QuizzesPage() {
   if (!session?.user) return null;
 
   const [quizzes, attempts] = await Promise.all([
-    db.quiz.findMany({
-      where: { published: true },
-      include: { _count: { select: { questions: true } } },
-      orderBy: { order: "asc" },
-    }),
+    getCachedQuizzesWithCount(),
     db.quizAttempt.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
+      take: 50,
     }),
   ]);
 

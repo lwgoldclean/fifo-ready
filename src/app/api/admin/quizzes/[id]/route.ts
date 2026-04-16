@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
@@ -64,6 +65,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       include: { questions: { orderBy: { order: "asc" } } },
     });
 
+    revalidateTag("quizzes");
     return NextResponse.json(quiz);
   } catch {
     return NextResponse.json({ error: "Failed to update quiz" }, { status: 500 });
@@ -76,5 +78,6 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   const { id } = await params;
   await db.quiz.delete({ where: { id } });
+  revalidateTag("quizzes");
   return NextResponse.json({ success: true });
 }

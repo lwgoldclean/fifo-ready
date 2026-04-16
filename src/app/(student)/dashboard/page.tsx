@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { getCachedDocuments, getCachedQuizzes } from "@/lib/cache";
 import Link from "next/link";
 import { MetaPixelPurchase } from "@/components/meta-pixel-purchase";
 import { FileText, ClipboardList, CheckCircle, Trophy, ArrowRight } from "lucide-react";
@@ -21,11 +22,12 @@ export default async function DashboardPage({
   const { success } = await searchParams;
 
   const [documents, quizzes, attempts, industryCallPurchase] = await Promise.all([
-    db.document.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
-    db.quiz.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
+    getCachedDocuments(),
+    getCachedQuizzes(),
     db.quizAttempt.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
+      take: 50,
     }),
     db.purchase.findFirst({
       where: { userId: session.user.id, productType: "industry_call", status: "COMPLETED" },
