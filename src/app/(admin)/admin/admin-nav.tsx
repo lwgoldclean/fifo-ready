@@ -9,6 +9,7 @@ import {
   FileText,
   ClipboardList,
   Users,
+  MessageSquare,
   LogOut,
   ArrowLeft,
   ShieldCheck,
@@ -30,6 +31,7 @@ type Props = {
 const navItems = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/students", label: "Students", icon: Users },
+  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/documents", label: "Documents", icon: FileText },
   { href: "/admin/quizzes", label: "Quizzes", icon: ClipboardList },
 ];

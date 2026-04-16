@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CheckCircle } from "lucide-react";
 
 const SUBJECTS = [
   "General Question",
@@ -22,10 +22,10 @@ type Props = {
 };
 
 export function ContactForm({ userName, userEmail }: Props) {
+  const router = useRouter();
   const [subject, setSubject] = useState(SUBJECTS[0]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -43,33 +43,12 @@ export function ContactForm({ userName, userEmail }: Props) {
         body: JSON.stringify({ subject, message }),
       });
       if (!res.ok) throw new Error("Failed to send");
-      setSent(true);
+      const data = await res.json();
+      router.push(`/contact/${data.messageId}`);
     } catch {
       setError("Something went wrong. Please try again.");
-    } finally {
       setLoading(false);
     }
-  }
-
-  if (sent) {
-    return (
-      <Card>
-        <CardContent className="p-8 flex flex-col items-center text-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-green-100 flex items-center justify-center">
-            <CheckCircle className="h-7 w-7 text-green-600" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-1">Message sent!</h2>
-            <p className="text-gray-500 text-sm">
-              You&apos;ll receive a confirmation email at <strong>{userEmail}</strong>. I&apos;ll get back to you within 24–48 hours.
-            </p>
-          </div>
-          <Button variant="outline" onClick={() => { setSent(false); setMessage(""); setSubject(SUBJECTS[0]); }}>
-            Send another message
-          </Button>
-        </CardContent>
-      </Card>
-    );
   }
 
   return (
