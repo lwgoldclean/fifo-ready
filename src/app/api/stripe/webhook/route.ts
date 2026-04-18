@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
-import { sendPurchaseNotification, sendResumeReviewAdminNotification, sendResumeReviewConfirmation, sendIndustryCallAdminNotification, sendIndustryCallConfirmation } from "@/lib/email";
+import { sendPurchaseNotification, sendResumeReviewAdminNotification, sendResumeReviewConfirmation, sendIndustryCallAdminNotification, sendIndustryCallConfirmation, sendAccountSetupEmail } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: Request) {
@@ -89,31 +89,61 @@ export async function POST(req: Request) {
       const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
       await sendPurchaseNotification(buyerEmail, amount).catch(console.error);
     } else {
-      // Guest checkout — find existing user by email and mark as paid if found.
-      // If the user doesn't have an account yet, the /welcome page handles creation.
+      // Guest checkout — find or create user by email, always mark as paid.
       const email = session.customer_details?.email;
       if (email) {
         const user = await db.user.findUnique({ where: { email } });
-        if (user && !user.hasPaid) {
-          await db.$transaction([
-            db.purchase.create({
-              data: {
-                userId: user.id,
-                stripeSessionId: session.id,
-                stripePaymentIntentId: session.payment_intent as string,
-                amount: session.amount_total ?? 0,
-                currency: session.currency ?? "aud",
-                status: "COMPLETED",
-                productType: "course",
-              },
-            }),
-            db.user.update({
-              where: { id: user.id },
-              data: { hasPaid: true, stripeCustomerId: session.customer as string },
-            }),
-          ]);
+        if (user) {
+          // Existing user — mark as paid if not already
+          if (!user.hasPaid) {
+            await db.$transaction([
+              db.purchase.create({
+                data: {
+                  userId: user.id,
+                  stripeSessionId: session.id,
+                  stripePaymentIntentId: session.payment_intent as string,
+                  amount: session.amount_total ?? 0,
+                  currency: session.currency ?? "aud",
+                  status: "COMPLETED",
+                  productType: "course",
+                },
+              }),
+              db.user.update({
+                where: { id: user.id },
+                data: { hasPaid: true, stripeCustomerId: session.customer as string },
+              }),
+            ]);
+            const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
+            await sendPurchaseNotification(email, amount).catch(console.error);
+            // If they have no password yet, send setup email so they can get in
+            if (!user.password) {
+              await sendAccountSetupEmail(email, session.id).catch(console.error);
+            }
+          }
+        } else {
+          // No account exists — create one immediately so the buyer is never orphaned
+          const newUser = await db.user.create({
+            data: {
+              email,
+              hasPaid: true,
+              stripeCustomerId: session.customer as string,
+              // password remains null — set via /welcome
+            },
+          });
+          await db.purchase.create({
+            data: {
+              userId: newUser.id,
+              stripeSessionId: session.id,
+              stripePaymentIntentId: session.payment_intent as string,
+              amount: session.amount_total ?? 0,
+              currency: session.currency ?? "aud",
+              status: "COMPLETED",
+              productType: "course",
+            },
+          });
           const amount = ((session.amount_total ?? 0) / 100).toFixed(2);
           await sendPurchaseNotification(email, amount).catch(console.error);
+          await sendAccountSetupEmail(email, session.id).catch(console.error);
         }
       }
     }

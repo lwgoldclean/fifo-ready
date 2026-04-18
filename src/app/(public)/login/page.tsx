@@ -29,6 +29,12 @@ export default function LoginPage() {
                 Get access for $4.99
               </Link>
             </p>
+            <p className="mt-2 text-center text-sm text-gray-500">
+              Paid but no account yet?{" "}
+              <Link href="/resend-setup" className="font-medium text-orange-600 hover:text-orange-500">
+                Resend your setup link
+              </Link>
+            </p>
           </CardContent>
         </Card>
       </div>

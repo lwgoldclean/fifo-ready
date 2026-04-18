@@ -199,6 +199,49 @@ export async function sendContactConfirmation(
   });
 }
 
+export async function sendAccountSetupEmail(email: string, sessionId: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://fifoready.com.au";
+  const setupUrl = `${baseUrl}/welcome?session_id=${sessionId}`;
+  await resend.emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: "Your FIFO Ready account is ready — set your password",
+    html: `<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f9fafb;margin:0;padding:40px 20px;">
+  <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
+    <div style="background:#1C1917;padding:28px 32px;text-align:center;">
+      <p style="color:#F59E0B;font-weight:bold;font-size:20px;margin:0;">⛏ FIFO Ready</p>
+    </div>
+    <div style="padding:32px;">
+      <h1 style="font-size:22px;font-weight:bold;color:#111827;margin-top:0;">
+        Payment confirmed — one last step!
+      </h1>
+      <p style="color:#4B5563;line-height:1.6;">
+        Your payment was successful and your lifetime access is secured. You just need to set a password to unlock your training dashboard.
+      </p>
+      <div style="text-align:center;margin:32px 0;">
+        <a href="${setupUrl}" style="background:#F59E0B;color:#fff;font-weight:bold;font-size:16px;padding:14px 32px;border-radius:8px;text-decoration:none;display:inline-block;">
+          Set Up My Account →
+        </a>
+      </div>
+      <p style="color:#6B7280;font-size:13px;line-height:1.6;">
+        If the button doesn't work, copy and paste this link into your browser:<br>
+        <a href="${setupUrl}" style="color:#F59E0B;word-break:break-all;">${setupUrl}</a>
+      </p>
+      <p style="color:#4B5563;line-height:1.6;">— Will, FIFO Ready</p>
+    </div>
+    <div style="background:#F9FAFB;padding:20px 32px;border-top:1px solid #E5E7EB;">
+      <p style="color:#9CA3AF;font-size:12px;margin:0;text-align:center;">
+        fifoready.com.au
+      </p>
+    </div>
+  </div>
+</body>
+</html>`,
+  });
+}
+
 export async function sendLeadEmail(
   to: string,
   firstName: string,
